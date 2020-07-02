@@ -9,32 +9,30 @@ import java.util.regex.*;
 public class Solution {
 
     // Complete the superDigit function below.
-    private static int  sumOfDigits(int number){
-        int sum=0;
-        while(number>0){
-            sum+=(number%10);
-            number/=10;
+    static int superDigit(String n, int k) {
+        
+        long sum = 0;
+        for(int i = 0;i < n.length();i++){
+            sum = sum + Long.parseLong(String.valueOf(n.charAt(i)));
         }
-        return sum;
+        sum = sum * (long)k;
+        String res = Long.toString(sum);
+
+        return findSum(res);
+
     }
-    private static int super_digit(int number){
-        //int num=Integer.parseIntnumber);
-        if(number<10)//Single digit
-        return number; 
+
+    static int findSum(String n){
+
+        Integer sum = 0;
+        for(int i = 0;i < n.length();i++){
+            sum = sum + Integer.parseInt(String.valueOf(n.charAt(i)));
+        }
+        String res = Integer.toString(sum);
+        if(res.length() == 1)
+            return sum;
         else
-        {
-            int res= sumOfDigits(number);
-            return super_digit(res);
-        }
-    } 
-    
-    static int superDigit(String n, int k){
-        int len=n.length();
-        int new_n=0;
-        for(int i=0;i<len;i++){
-            new_n=new_n+(Integer.parseInt(n.charAt(i)+"") * k);
-        }
-        return super_digit(new_n);
+            return findSum(res);
     }
 
     private static final Scanner scanner = new Scanner(System.in);
