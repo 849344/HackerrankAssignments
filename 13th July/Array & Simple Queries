@@ -1,0 +1,104 @@
+import java.io.*;
+import java.util.*;
+ import java.text.*; 
+ import java.math.*; 
+ import java.util.regex.*;
+
+public class Solution {
+
+public static void main(String[] args) {
+    /* Enter your code here. Read input from STDIN. Print output to STDOUT. Your class should be named Solution. */
+    Scanner sc=new Scanner(System.in);
+    //System.out.println("enter size of array");
+    int n=sc.nextInt();
+   // System.out.println("enter number of opeRAtion");
+    int m=sc.nextInt();
+    int arr[]=new int[n];
+    int brr[]=new int[n];
+  //  System.out.println("enter elements of an array");
+    for(int i=0;i<n;i++)
+    {
+        arr[i]=sc.nextInt();
+    }
+    for(int j=0;j<m;j++)
+    {
+       // System.out.println("enter value of type");
+        int t=sc.nextInt();
+       // System.out.println("enter value which is starting shift");
+       int a=sc.nextInt();
+       // System.out.println("enter value which is ending shift");
+       int b=sc.nextInt();
+       if(t==1){
+             int l=0;
+           for(int k=a-1;k<=b-1;k++)
+           {
+               brr[l]=arr[k];
+               l++;
+           }
+           if(a-1>=0)
+           {
+               for(int f=0;f<a-1;f++)
+               {
+                   brr[l]=arr[f];
+                   l++;
+               }
+           }
+           if(b-1<n)
+           {
+               for(int o=b;o<n;o++)
+               {
+                   brr[l]=arr[o];
+                   l++;
+               }
+           }
+       for(int d=0;d<n;d++)
+           {
+               arr[d]=brr[d];
+           }
+
+       }
+       if(t==2)
+       {
+
+        int s=n-1;
+           for(int k=b-1;k>=a-1;k--)
+           {
+               brr[s]=arr[k];
+               s--;
+           }
+           int p=0;
+           if(a-1>=0)
+           {
+
+               for(int r=0;r<a-1;r++)
+               {
+                   brr[p]=arr[r];
+                   p++;
+               }
+           }
+           if(b-1<n)
+           {
+               for(int q=b;q<n;q++)
+               {
+                   if(p<=s)
+                   {
+                   brr[p]=arr[q];
+                   p++;
+                   }
+               }
+           }
+
+
+    for(int d=0;d<n;d++)
+           {
+               arr[d]=brr[d];
+           }
+       }    
+    }
+    System.out.println(arr[0]-arr[n-1]);
+    for(int v=0;v<n;v++)
+    {
+
+        System.out.print(arr[v]+" ");
+    }
+}
