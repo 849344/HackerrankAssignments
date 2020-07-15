@@ -20,16 +20,14 @@ public class Solution {
          }
          int ct=0;
          int a,b,new_element;
-         while(hash.peek() < k-1 && hash.size()>1 ){
+         while(hash.peek() <= k-1 && hash.size()>1 ){
              //take the first 2 elements and update their value
-            a=hash.peek(); //first
-            hash.poll();    //removed the first
-            b=hash.peek();  //2nd
-            hash.poll();
-            new_element=a*1 + b*2;
+            a=hash.poll(); //first    //removed the first
+            b=hash.poll();
+            new_element=(a*1) + (b*2);
            // System.out.println(a+" "+b+" "+ new_element);
             hash.add(new_element);
-            ct++;
+            ++ct;
          }
          if(hash.size()==1 && hash.peek()<= k-1)
          return -1;
