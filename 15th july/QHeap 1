@@ -1,0 +1,31 @@
+import java.io.*;
+import java.util.*;
+
+public class Solution {
+
+    public static void main(String[] args) {
+        /* Enter your code here. Read input from STDIN. Print output to STDOUT. Your class should be named Solution. */
+        PriorityQueue<Integer> heap=new PriorityQueue<Integer>();
+        int command,value;
+        int q;
+        Scanner sc=new Scanner(System.in);
+        q=sc.nextInt();
+        while(q>0){
+            command=sc.nextInt();
+            if(command == 1 ){
+                value=sc.nextInt();
+                heap.add(value);
+            }
+            else if(command == 2)
+            {   
+                value=sc.nextInt();
+                heap.remove(value);
+            }
+            else if(command == 3){
+                System.out.println(heap.peek());
+            }
+            q--;
+        }
+
+    }
+}
