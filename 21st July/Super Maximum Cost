@@ -1,0 +1,142 @@
+import java.io.*;
+import java.math.*;
+import java.text.*;
+import java.util.*;
+import java.util.regex.*;
+
+public class Solution {
+
+    // Complete the solve function below.
+    static int[] solve(int[][] tree, int[][] queries) {
+            int low = 0, high = 0;
+    ArrayList<Integer> maxPathCostArray = new ArrayList<Integer>();
+    maxPathCostArray = getMaxPathCostArray(tree);
+    int[] result = new int[queries.length];
+    for(int i = 0; i < queries.length; i++){
+        low = queries[i][0];
+        high = queries[i][1];
+        for(int k = 0; k < maxPathCostArray.size(); k++){
+            if(maxPathCostArray.get(k) >= low && maxPathCostArray.get(k) <= high)
+                result[i]++;
+        }
+    }
+    return result;
+}
+
+static ArrayList<Integer> getMaxPathCostArray(int[][] tree){
+    int n = tree.length + 1; //number of nodes
+    int maxPathCost = 0;
+    int from = 0; int to = 0;
+    ArrayList<Integer> maxPathCostArray = new ArrayList<Integer>();
+
+    //Loop through all nodes
+    for(int i = 1; i <= n - 1; i++){
+        from = i;
+        for(int j = i + 1; j <= n; j++)
+        {
+            to = j;
+            maxPathCostArray.add(getMaxCostForPath(from, to, tree));
+        }
+
+    }
+    return maxPathCostArray;
+}
+
+static int getMaxCostForPath(int from, int to, int[][] tree){
+    ArrayList<Integer> visited = new ArrayList<Integer>();
+    Stack<Integer> stack = new Stack<Integer>();
+    stack.push(from);
+    visited.add(from);
+    int maxCost = 0;
+    boolean pathFound = false;
+    int newNode = 0;
+
+    int x = 0, y = 0;
+
+    while(stack.peek() != to){
+        for(int i = 0; i < tree.length; i++){
+            if(stack.peek() == tree[i][0] && !visited.contains(tree[i][1])){
+                newNode = tree[i][1];
+                pathFound = true;
+            }
+            if(stack.peek() == tree[i][1] && !visited.contains(tree[i][0])){
+                newNode = tree[i][0];
+                pathFound = true;
+            }
+        }
+
+        if(stack.peek() != to && pathFound == false)
+            stack.pop();
+        else {
+            stack.push(newNode);
+            visited.add(newNode);
+            pathFound = false;
+        }
+    }
+
+    while(stack.peek() != from){
+        x = stack.pop();
+        y = stack.peek();
+
+        for(int i = 0; i < tree.length; i++){
+            if((tree[i][0] == x && tree[i][1] == y) || (tree[i][0] == y && tree[i][1] == x))
+            if(tree[i][2] > maxCost)
+                maxCost = tree[i][2];
+        }
+    }
+
+    return maxCost;
+    }
+
+    private static final Scanner scanner = new Scanner(System.in);
+
+    public static void main(String[] args) throws IOException {
+        BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(System.getenv("OUTPUT_PATH")));
+
+        String[] nq = scanner.nextLine().split(" ");
+
+        int n = Integer.parseInt(nq[0]);
+
+        int q = Integer.parseInt(nq[1]);
+
+        int[][] tree = new int[n-1][3];
+
+        for (int treeRowItr = 0; treeRowItr < n-1; treeRowItr++) {
+            String[] treeRowItems = scanner.nextLine().split(" ");
+            scanner.skip("(\r\n|[\n\r\u2028\u2029\u0085])?");
+
+            for (int treeColumnItr = 0; treeColumnItr < 3; treeColumnItr++) {
+                int treeItem = Integer.parseInt(treeRowItems[treeColumnItr]);
+                tree[treeRowItr][treeColumnItr] = treeItem;
+            }
+        }
+
+        int[][] queries = new int[q][2];
+
+        for (int queriesRowItr = 0; queriesRowItr < q; queriesRowItr++) {
+            String[] queriesRowItems = scanner.nextLine().split(" ");
+            scanner.skip("(\r\n|[\n\r\u2028\u2029\u0085])?");
+
+            for (int queriesColumnItr = 0; queriesColumnItr < 2; queriesColumnItr++) {
+                int queriesItem = Integer.parseInt(queriesRowItems[queriesColumnItr]);
+                queries[queriesRowItr][queriesColumnItr] = queriesItem;
+            }
+        }
+
+        int[] result = solve(tree, queries);
+
+        for (int resultItr = 0; resultItr < result.length; resultItr++) {
+            bufferedWriter.write(String.valueOf(result[resultItr]));
+
+            if (resultItr != result.length - 1) {
+                bufferedWriter.write("\n");
+            }
+        }
+
+        bufferedWriter.newLine();
+
+        bufferedWriter.close();
+
+        scanner.close();
+    }
+}
