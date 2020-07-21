@@ -1,0 +1,97 @@
+import java.io.*;
+import java.math.*;
+import java.text.*;
+import java.util.*;
+import java.util.regex.*;
+
+public class Solution {
+
+    /*
+     * Complete the componentsInGraph function below.
+     */
+    static int[] componentsInGraph(int[][] gb) {
+        /*
+         * Write your code here.
+         */
+         int[] parents = new int[30001];
+
+    int n = gb.length;
+    int a, b;
+    int index=0;
+    while(n-- > 0){
+            a=gb[index][0];
+            b=gb[index][1];
+
+        if(parents[a] == 0) parents[a] = a;
+        if(parents[b] == 0) parents[b] = a;
+
+        //Disjoin set idea, keep updating the representative element of each set.
+        if(parents[a] != 0 || parents[b] != 0){
+            int low = Math.min(parents[a], parents[b]);
+            int high = Math.max(parents[a], parents[b]);
+            for(int i=0; i<parents.length; i++){
+                if(parents[i] == high)
+                    parents[i] = low;
+            }
+        }
+        index++;
+
+    }
+
+    //convert int[] to Integer[] in order to use Collections.frequency(Integer[], int)
+    Integer[] newArray = new Integer[parents.length];
+    int i = 0;
+    for (int value : parents) {
+        newArray[i++] = value;
+    }
+
+    List<Integer> ints = Arrays.asList(newArray);
+    int min = Integer.MAX_VALUE;
+    int max = Integer.MIN_VALUE;
+
+    for(int item : newArray) {
+        if(item != 0) {
+            int frequency = Collections.frequency(ints, item);
+            min = Math.min(min, frequency);
+            max = Math.max(max, frequency);
+        }
+    }
+    int res[] = new int[2];
+    res[0]=min;
+    res[1]=max;
+return res;
+    }
+
+    private static final Scanner scanner = new Scanner(System.in);
+
+    public static void main(String[] args) throws IOException {
+        BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(System.getenv("OUTPUT_PATH")));
+
+        int n = Integer.parseInt(scanner.nextLine().trim());
+
+        int[][] gb = new int[n][2];
+
+        for (int gbRowItr = 0; gbRowItr < n; gbRowItr++) {
+            String[] gbRowItems = scanner.nextLine().split(" ");
+
+            for (int gbColumnItr = 0; gbColumnItr < 2; gbColumnItr++) {
+                int gbItem = Integer.parseInt(gbRowItems[gbColumnItr].trim());
+                gb[gbRowItr][gbColumnItr] = gbItem;
+            }
+        }
+
+        int[] result = componentsInGraph(gb);
+            
+        for (int SPACEItr = 0; SPACEItr < result.length; SPACEItr++) {
+            bufferedWriter.write(String.valueOf(result[SPACEItr]));
+
+            if (SPACEItr != result.length - 1) {
+                bufferedWriter.write(" ");
+            }
+        }
+
+        bufferedWriter.newLine();
+
+        bufferedWriter.close();
+    }
+}
